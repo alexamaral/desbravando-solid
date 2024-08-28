@@ -1,17 +1,15 @@
 package cotuba;
 
-import com.github.stefanbirkner.systemlambda.SystemLambda;
+import cotuba.cli.Main;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MainTest {
 
@@ -77,7 +75,7 @@ class MainTest {
     @Test
     void shoulConvertToPdfWithOutParameters(){
 
-        var parameters = new String[]{"-d", "livro-exemplo"};
+        var parameters = new String[]{"-d", "livro-exemplo", "-v"};
 
         Main.main(parameters);
 

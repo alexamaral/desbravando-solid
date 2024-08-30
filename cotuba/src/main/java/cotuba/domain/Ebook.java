@@ -5,12 +5,12 @@ import java.util.List;
 
 public class Ebook {
 
-    private String formato;
+    private FormatoEbook formato;
     private Path arquivoDeSaida;
     private List<Capitulo> capitulos;
 
 
-    public Ebook(String formato, Path arquivoDeSaida, List<Capitulo> capitulos) {
+    public Ebook(FormatoEbook formato, Path arquivoDeSaida, List<Capitulo> capitulos) {
         this.formato = formato;
         this.arquivoDeSaida = arquivoDeSaida;
         this.capitulos = capitulos;
@@ -21,7 +21,7 @@ public class Ebook {
     }
 
 
-    public String getFormato() {
+    public FormatoEbook getFormato() {
         return formato;
     }
 

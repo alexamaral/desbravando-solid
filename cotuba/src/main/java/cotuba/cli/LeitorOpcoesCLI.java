@@ -1,6 +1,7 @@
 package cotuba.cli;
 
 import cotuba.application.ParametrosCotuba;
+import cotuba.domain.FormatoEbook;
 import org.apache.commons.cli.*;
 
 import java.io.File;
@@ -9,11 +10,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Comparator;
+import java.util.Optional;
 
 public class LeitorOpcoesCLI implements ParametrosCotuba {
 
     private Path diretorioDosMD;
-    private String formato;
+    private FormatoEbook formato;
     private Path arquivoDeSaida;
     private boolean modoVerboso = false;
 
@@ -60,13 +62,10 @@ public class LeitorOpcoesCLI implements ParametrosCotuba {
 
 
     private void trataFormato(CommandLine cmd) {
-        String nomeDoFormatoDoEbook = cmd.getOptionValue("format");
-
-        if (nomeDoFormatoDoEbook != null) {
-            formato = nomeDoFormatoDoEbook.toLowerCase();
-        } else {
-            formato = "pdf";
-        }
+        formato = Optional.ofNullable(cmd.getOptionValue("format"))
+                .map(String::toUpperCase)
+                .map(FormatoEbook::valueOf)
+                .orElse(FormatoEbook.PDF);
     }
 
     private void trataArquivoDeSaida(CommandLine cmd) {
@@ -74,7 +73,8 @@ public class LeitorOpcoesCLI implements ParametrosCotuba {
         if (nomeDoArquivoDeSaidaDoEbook != null) {
             arquivoDeSaida = Paths.get(nomeDoArquivoDeSaidaDoEbook);
         } else {
-            arquivoDeSaida = Paths.get("book." + formato.toLowerCase());
+            var  extencao = "html".equalsIgnoreCase(formato.name()) ? "" : "." + formato.name().toLowerCase();
+            arquivoDeSaida = Paths.get("book" + extencao);
         }
 
         try {
@@ -84,9 +84,9 @@ public class LeitorOpcoesCLI implements ParametrosCotuba {
                         .sorted(Comparator.reverseOrder())
                         .map(Path::toFile)
                         .forEach(File::delete);
-            } else {
-                Files.deleteIfExists(arquivoDeSaida);
             }
+
+            Files.deleteIfExists(arquivoDeSaida);
         } catch (IOException ex) {
             throw new IllegalArgumentException(ex);
         }
@@ -102,7 +102,7 @@ public class LeitorOpcoesCLI implements ParametrosCotuba {
     }
 
     @Override
-    public String getFormato() {
+    public FormatoEbook getFormato() {
         return formato;
     }
 

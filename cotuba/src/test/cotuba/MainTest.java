@@ -40,6 +40,7 @@ class MainTest {
         }
 
         Files.deleteIfExists(HTML_BOOK);
+
     }
 
     @Test

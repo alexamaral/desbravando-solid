@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>cotuba</groupId>
 	<artifactId>cotuba-cli</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.5-SNAPSHOT</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -12,6 +12,29 @@
 	</properties>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>br.com.paradizo</groupId>
+			<artifactId>tema-paradizo</artifactId>
+			<version>1.4-SNAPSHOT</version>
+			<exclusions>
+				<exclusion>
+					<groupId>cotuba</groupId>
+					<artifactId>cotuba-cli</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>br.com.cognitio</groupId>
+			<artifactId>estatisticas-ebook</artifactId>
+			<version>0.0.4-SNAPSHOT</version>
+			<exclusions>
+				<exclusion>
+					<groupId>cotuba</groupId>
+					<artifactId>cotuba-cli</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -79,6 +102,7 @@
 			<scope>test</scope>
 		</dependency>
 
+
 	</dependencies>
 
 	<build>
@@ -101,6 +125,33 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!--plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>resource-dependencies</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>br.com.paradizo</groupId>
+									<artifactId>tema-paradizo</artifactId>
+									<version>1.1-SNAPSHOT</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>${project.build.directory}</outputDirectory>
+								</artifactItem>
+							</artifactItems>
+							<includes>directory_to_include/**</includes>
+							<outputDirectory>${project.build.outputDirectory}</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin-->
 		</plugins>
 	</build>
 

@@ -1,6 +1,8 @@
 package cotuba.md;
 
+import cotuba.builder.CapituloBuilder;
 import cotuba.domain.Capitulo;
+import cotuba.plugin.Plugin;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
@@ -26,10 +28,10 @@ public class RenderizadorMDParaHTML  {
     }
 
     private Capitulo renderizaCapitulo(Path arquivoMD) {
-        Capitulo capitulo = new Capitulo();
-        Node document = parseDoMD(arquivoMD, capitulo);
-        renderizaParaHTML(arquivoMD, capitulo, document);
-        return capitulo;
+        var capituloBuider = CapituloBuilder.builder();
+        Node document = parseDoMD(arquivoMD, capituloBuider);
+        renderizaParaHTML(arquivoMD, capituloBuider, document);
+        return capituloBuider.constroi();
     }
 
     private List<Path> obtemArquivosMD(Path diretorioDosMD) {
@@ -46,22 +48,26 @@ public class RenderizadorMDParaHTML  {
 
     }
 
-    private Node parseDoMD(Path arquivoMD, Capitulo capitulo) {
+    private Node parseDoMD(Path arquivoMD, CapituloBuilder capituloBuilder) {
         try {
             Parser parser = Parser.builder().build();
             var document = parser.parseReader(Files.newBufferedReader(arquivoMD));
-            document.accept(LevelVisitor.from(capitulo));
+            document.accept(LevelVisitor.from(capituloBuilder));
             return document;
         } catch (Exception ex) {
             throw new IllegalStateException("Erro ao fazer parse do arquivo " + arquivoMD, ex);
         }
     }
 
-    private void renderizaParaHTML(Path arquivoMD, Capitulo capitulo, Node document) {
+    private void renderizaParaHTML(Path arquivoMD, CapituloBuilder capituloBuilder, Node document) {
         try {
             HtmlRenderer renderer = HtmlRenderer.builder().build();
             String html = renderer.render(document);
-            capitulo.setConteudoHTML(html);
+
+            String htmlModificado = Plugin.renderizou(html);
+
+            capituloBuilder.comConteudoHTML(htmlModificado);
+
         } catch (Exception ex) {
             throw new IllegalStateException("Erro ao renderizar para HTML o arquivo " + arquivoMD, ex);
         }
